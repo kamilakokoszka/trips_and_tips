@@ -2,15 +2,36 @@ import pytest
 from django.contrib.auth import get_user_model
 
 from django.urls import reverse
+from utils_user import create_user
 
 CREATE_USER_URL = reverse('user:register')
 
 
-def create_user(**params):
-    """Create and return a new user."""
-    return get_user_model().objects.create_user(**params)
+# Home page tests
+@pytest.mark.django_db
+def test_home_page_authorized(client, user):
+    """Test proper home page template is displayed to authenticated user."""
+    client.force_login(user)
+    url = reverse('user:home-page')
+    response = client.get(url)
+
+    assert response.status_code == 200
+    assert 'home_page.html' in [
+        template.name for template in response.templates]
 
 
+@pytest.mark.django_db
+def test_home_page_unauthorized(client):
+    """Test proper home page template is displayed to unauthenticated user."""
+    url = reverse('user:home-page')
+    response = client.get(url)
+
+    assert response.status_code == 200
+    assert 'home_unauthenticated.html' in [
+        template.name for template in response.templates]
+
+
+# RegistrationView tests
 @pytest.mark.django_db
 def test_user_registration(client):
     """Test creating a user is successful."""
