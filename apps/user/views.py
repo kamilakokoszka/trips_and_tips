@@ -11,8 +11,8 @@ User = get_user_model()
 
 def home_page(request):
     if request.user.is_authenticated:
-        return render(request, 'home-page.html')
-    return render(request, 'home-unauthenticated.html')
+        return render(request, 'home_page.html')
+    return render(request, 'home_unauthenticated.html')
 
 
 class RegistrationView(CreateView):
