@@ -1,0 +1,11 @@
+import os
+import sys
+
+import pytest
+from django.test import Client
+
+
+@pytest.fixture
+def client():
+    client = Client()
+    return client
