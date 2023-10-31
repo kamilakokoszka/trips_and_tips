@@ -33,7 +33,7 @@ def test_home_page_unauthorized(client):
         template.name for template in response.templates]
 
 
-# RegistrationView tests
+# UserRegistrationView tests
 @pytest.mark.django_db
 def test_user_registration(client):
     """Test creating a user is successful."""

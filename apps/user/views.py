@@ -19,7 +19,7 @@ def home_page(request):
     return render(request, 'home_unauthenticated.html')
 
 
-class RegistrationView(CreateView):
+class UserRegistrationView(CreateView):
     form_class = CustomUserCreationForm
     template_name = 'user/registration.html'
 
