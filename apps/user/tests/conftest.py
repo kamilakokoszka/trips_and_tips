@@ -1,7 +1,8 @@
 import pytest
-
+from django.contrib.auth import get_user_model
 from django.test import Client
-from apps.core.models import CustomUser
+
+CustomUser = get_user_model()
 
 
 @pytest.fixture

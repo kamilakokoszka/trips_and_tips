@@ -1,8 +1,10 @@
 import pytest
-from django.contrib.auth import get_user_model
 
+from django.contrib.auth import get_user_model
 from django.urls import reverse
-from utils_user import create_user
+
+from utils import create_user
+
 
 CREATE_USER_URL = reverse('user:register')
 
@@ -80,3 +82,32 @@ def test_password_too_short(client):
     assert response.status_code == 200
     users = get_user_model().objects.all()
     assert users.count() == 0
+
+
+# UserLoginView tests
+@pytest.mark.django_db
+def test_login_successful(client, user):
+    """Test logging in is successful."""
+    url = reverse('user:login')
+    login_data = {
+        'email': 'test@example.com',
+        'password': 'Testpass123'
+    }
+    response = client.post(url, login_data)
+
+    assert response.status_code == 302
+    assert response.wsgi_request.user.is_authenticated
+
+
+@pytest.mark.django_db
+def test_login_invalid_data(client, user):
+    """Test logging in is unsuccessful if invalid data."""
+    url = reverse('user:login')
+    login_data = {
+        'email': 'test@example.com',
+        'password': 'pass123'
+    }
+    response = client.post(url, login_data)
+
+    assert response.status_code == 200
+    assert not response.wsgi_request.user.is_authenticated
