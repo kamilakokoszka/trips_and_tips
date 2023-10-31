@@ -1,4 +1,4 @@
-from django.contrib.auth import get_user_model, authenticate, login
+from django.contrib.auth import get_user_model, authenticate, login, logout
 
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
@@ -53,3 +53,9 @@ class UserLoginView(View):
                 return redirect(reverse_lazy('user:home-page'))
 
         return render(request, self.template_name, {'form': form})
+
+
+class UserLogoutView(View):
+    def get(self, request):
+        logout(request)
+        return redirect(reverse_lazy('user:home-page'))
