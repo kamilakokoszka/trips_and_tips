@@ -111,3 +111,14 @@ def test_login_invalid_data(client, user):
 
     assert response.status_code == 200
     assert not response.wsgi_request.user.is_authenticated
+
+
+# UserLogoutView test
+@pytest.mark.django_db
+def test_logout_successful(client, user):
+    """Test logging out is successful."""
+    url = reverse('user:logout')
+    response = client.get(url)
+
+    assert response.status_code == 302
+    assert not response.wsgi_request.user.is_authenticated
