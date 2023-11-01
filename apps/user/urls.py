@@ -2,7 +2,6 @@
 URLs for user app.
 """
 from django.urls import path
-from django.views.generic import TemplateView
 
 from .views import (
     home_page,
@@ -10,7 +9,8 @@ from .views import (
     UserLoginView,
     UserLogoutView,
     UserSettingsView,
-    UserPasswordChangeView
+    UserPasswordChangeView,
+    UserDeleteView,
 )
 
 app_name = 'user'
@@ -21,6 +21,8 @@ urlpatterns = [
     path('login/', UserLoginView.as_view(), name='login'),
     path('settings/', UserSettingsView.as_view(), name='settings'),
     path('logout/', UserLogoutView.as_view(), name='logout'),
-    path('change-password/', UserPasswordChangeView.as_view(), name='password-change'),
+    path('change-password/', UserPasswordChangeView.as_view(),
+         name='password-change'),
+    path('<int:pk>/delete/', UserDeleteView.as_view(), name='delete'),
 
 ]

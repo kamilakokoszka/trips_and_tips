@@ -12,7 +12,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 
 from django.views import View
-from django.views.generic import CreateView, TemplateView
+from django.views.generic import CreateView, TemplateView, DeleteView
 
 from .forms import UserLoginForm
 from ..core.forms import CustomUserCreationForm
@@ -92,3 +92,11 @@ class UserPasswordChangeView(LoginRequiredMixin, View):
             messages.error(request, 'Please correct the error below.')
 
         return render(request, self.template_name, {'form': form})
+
+
+class UserDeleteView(LoginRequiredMixin, DeleteView):
+    model = User
+    success_url = reverse_lazy('user:home-page')
+    template_name = 'user/user_confirm_delete.html'
+
+
