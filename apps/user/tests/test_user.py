@@ -122,3 +122,45 @@ def test_logout_successful(client, user):
 
     assert response.status_code == 302
     assert not response.wsgi_request.user.is_authenticated
+
+
+# UserSettingsView test
+@pytest.mark.django_db
+def test_user_settings(client, user):
+    """Test user settings template is displayed correctly."""
+    url = reverse('user:settings')
+    response = client.get(url)
+
+    assert response.status_code == 200
+
+
+"""# UserChangePasswordView tests
+@pytest.mark.django_db
+def test_change_password_successful(client, user):
+    Test changing password is successful.
+    url = reverse('user:change-password')
+    data = {
+        'current_password': 'Testpass123',
+        'new_password1': 'New123456',
+        'new_password2': 'New123456'
+    }
+
+    response = client.post(url, data)
+
+    assert response.status_code == 302
+    assert user.password == data['new_password']
+
+
+def test_change_password_too_short(client, user):
+    Test changing password is successful.
+    url = reverse('user:change-password')
+    data = {
+        'current_password': 'Testpass123',
+        'new_password1': 'New',
+        'new_password2': 'New'
+    }
+
+    response = client.post(url, data)
+
+    assert response.status_code == 200
+    assert user.password == data['current_password']"""
