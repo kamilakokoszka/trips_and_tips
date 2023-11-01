@@ -1,4 +1,6 @@
-from django.contrib.auth import get_user_model, authenticate, login, logout
+from django.contrib import messages
+from django.contrib.auth import get_user_model, authenticate, login, logout, update_session_auth_hash
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
@@ -55,7 +57,27 @@ class UserLoginView(View):
         return render(request, self.template_name, {'form': form})
 
 
-class UserLogoutView(View):
+class UserLogoutView(LoginRequiredMixin, View):
     def get(self, request):
         logout(request)
         return redirect(reverse_lazy('user:home-page'))
+
+
+"""class UserPasswordChangeView(LoginRequiredMixin, View):
+    template_name = 'user/change_password.html'
+
+    def get(self, request):
+        form = PasswordChangeForm
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request):
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, 'Your password has been changed successfully.')
+            return redirect()
+        else:
+            messages.error(request, 'Please correct the error below.')
+            
+        return render(request, )"""
