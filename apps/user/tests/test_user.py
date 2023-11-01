@@ -5,7 +5,6 @@ from django.urls import reverse
 
 from utils import create_user
 
-
 User = get_user_model()
 CREATE_USER_URL = reverse('user:register')
 
@@ -159,7 +158,7 @@ def test_password_change_successful(client, user):
 
 @pytest.mark.django_db
 def test_change_password_too_short(client, user):
-    """Test changing password is successful."""
+    """Test changing password is unsuccessful when password too short."""
     client.login(email='test@example.com', password='Testpass123')
     url = reverse('user:password-change')
 
@@ -174,3 +173,17 @@ def test_change_password_too_short(client, user):
 
     assert response.status_code == 200
     assert user.check_password('Testpass123')
+
+
+# UserDeleteView tests
+
+@pytest.mark.django_db
+def test_user_delete_successful(client, user):
+    """Test user is deleted successfully."""
+    client.login(email='test@example.com', password='Testpass123')
+    url = reverse('user:delete', args=[user.pk])
+
+    response = client.post(url)
+
+    assert response.status_code == 302
+    assert not User.objects.filter(username='testuser').exists()
