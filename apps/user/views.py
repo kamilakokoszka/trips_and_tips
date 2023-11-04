@@ -8,14 +8,15 @@ from django.contrib.auth import (
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 
 from django.views import View
 from django.views.generic import CreateView, TemplateView, DeleteView
 
-from .forms import UserLoginForm
-from ..core.forms import CustomUserCreationForm
+from apps.user.forms import UserLoginForm
+from apps.core.forms import CustomUserCreationForm
+from apps.core.models import Profile
 
 
 User = get_user_model()
@@ -26,6 +27,8 @@ def home_page(request):
         return render(request, 'home_page.html')
     return render(request, 'home_unauthenticated.html')
 
+
+# ------- User views -------
 
 class UserRegistrationView(CreateView):
     form_class = CustomUserCreationForm
@@ -100,3 +103,14 @@ class UserDeleteView(LoginRequiredMixin, DeleteView):
     template_name = 'user/user_confirm_delete.html'
 
 
+# ------- Profile views -------
+
+class UserProfileView(TemplateView):
+    template_name = 'user/profile.html'
+
+    def get_context_data(self, user_id):
+        context = super().get_context_data()
+        user = get_object_or_404(User, id=user_id)
+        context['user'] = user
+        context['profile'] = get_object_or_404(Profile, user=user)
+        return context

@@ -11,6 +11,7 @@ from .views import (
     UserSettingsView,
     UserPasswordChangeView,
     UserDeleteView,
+    UserProfileView,
 )
 
 app_name = 'user'
@@ -24,5 +25,6 @@ urlpatterns = [
     path('change-password/', UserPasswordChangeView.as_view(),
          name='password-change'),
     path('<int:pk>/delete/', UserDeleteView.as_view(), name='delete'),
+    path('profile/<int:user_id>', UserProfileView.as_view(), name='profile'),
 
 ]
