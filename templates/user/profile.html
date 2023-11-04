@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div>
+        <h1>{{ user.username }}</h1>
+        <img src="{{ profile.image.url }}">
+        <a href="{{ profile.website }}">Website</a>
+        <p>{{ profile.bio }}</p>
+    </div>
+{% endblock %}
