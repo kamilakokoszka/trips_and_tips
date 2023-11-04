@@ -52,7 +52,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
 
 class Profile(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     bio = models.TextField(blank=True, null=True)
     website = models.CharField(max_length=255, blank=True, null=True)
     picture = models.ImageField(default='default.jpg', upload_to='profile_pics')
