@@ -33,6 +33,8 @@ def test_home_page_unauthorized(client):
         template.name for template in response.templates]
 
 
+# -----USER TESTS -----
+
 # UserRegistrationView tests
 @pytest.mark.django_db
 def test_user_registration(client):
@@ -187,3 +189,17 @@ def test_user_delete_successful(client, user):
 
     assert response.status_code == 302
     assert not User.objects.filter(username='testuser').exists()
+
+
+# -----PROFILE TESTS -----
+
+# UserProfileView tests
+
+@pytest.mark.django_db
+def test_user_profile_view(client, user):
+    """Test user profile is displayed correctly."""
+    url = reverse('user:profile', args=[user.pk])
+
+    response = client.get(url)
+
+    assert response.status_code == 200
