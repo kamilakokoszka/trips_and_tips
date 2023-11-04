@@ -5,6 +5,8 @@ from django.urls import reverse
 
 from utils import create_user
 
+from apps.core.models import Profile
+
 User = get_user_model()
 CREATE_USER_URL = reverse('user:register')
 
@@ -203,3 +205,22 @@ def test_user_profile_view(client, user):
     response = client.get(url)
 
     assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_user_profile_update(client, user):
+    """Test updating user profile is successful."""
+    client.login(email='test@example.com', password='Testpass123')
+    url = reverse('user:profile-update')
+
+    data = {
+        'bio': 'abc',
+        'website': 'test.com'
+    }
+
+    response = client.post(url, data)
+
+    assert response.status_code == 302
+    profile = Profile.objects.get(user=user)
+    assert profile.bio == 'abc'
+    assert profile.website == 'test.com'
