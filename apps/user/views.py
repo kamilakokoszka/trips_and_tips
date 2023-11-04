@@ -14,7 +14,7 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import CreateView, TemplateView, DeleteView
 
-from apps.user.forms import UserLoginForm
+from apps.user.forms import UserLoginForm, ProfileUpdateForm
 from apps.core.forms import CustomUserCreationForm
 from apps.core.models import Profile
 
@@ -28,7 +28,7 @@ def home_page(request):
     return render(request, 'home_unauthenticated.html')
 
 
-# ------- User views -------
+# ------- User views ------- #
 
 class UserRegistrationView(CreateView):
     form_class = CustomUserCreationForm
@@ -103,7 +103,7 @@ class UserDeleteView(LoginRequiredMixin, DeleteView):
     template_name = 'user/user_confirm_delete.html'
 
 
-# ------- Profile views -------
+# ------- Profile views ------- #
 
 class UserProfileView(TemplateView):
     template_name = 'user/profile.html'
@@ -114,3 +114,24 @@ class UserProfileView(TemplateView):
         context['user'] = user
         context['profile'] = get_object_or_404(Profile, user=user)
         return context
+
+
+class UserProfileUpdateView(LoginRequiredMixin, View):
+    template_name = 'user/profile_update.html'
+
+    def get(self, request):
+        form = ProfileUpdateForm(instance=request.user.profile)
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request):
+        form = ProfileUpdateForm(request.POST,
+                                 instance=request.user.profile)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your profile has been updated!')
+            return redirect(reverse_lazy('user:profile',
+                                         args=[request.user.pk]))
+        else:
+            messages.error(request, 'Please correct the error below.')
+
+        return render(request, self.template_name, {'form': form})
