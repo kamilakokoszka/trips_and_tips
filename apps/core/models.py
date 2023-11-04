@@ -55,11 +55,11 @@ class Profile(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     bio = models.TextField(blank=True, null=True)
     website = models.CharField(max_length=255, blank=True, null=True)
-    picture = models.ImageField(upload_to='images/user/')
+    picture = models.ImageField(default='default.jpg', upload_to='profile_pics')
 
     class Meta:
         verbose_name = 'Profile'
         verbose_name_plural = 'Profiles'
 
     def __str__(self):
-        return f"{self.user}'s profile"
+        return f"{self.user} Profile"
