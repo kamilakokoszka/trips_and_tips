@@ -1,5 +1,6 @@
 import pytest
 from django.contrib.auth import get_user_model
+from apps.core.models import Profile
 
 User = get_user_model()
 
@@ -15,6 +16,7 @@ def test_create_user():
         username=username,
         password=password,
     )
+
     assert user.email == email
     assert user.username == username
     assert user.check_password(password) is True
@@ -32,5 +34,14 @@ def test_create_superuser():
         username=username,
         password=password,
     )
+
     assert admin.is_superuser is True
     assert admin.is_staff is True
+
+
+@pytest.mark.django_db
+def test_create_profile(test_user):
+    """Test profile is created when user is created."""
+
+    assert Profile.objects.all().count() == 1
+    assert str(Profile.objects.first()) == 'testuser Profile'
