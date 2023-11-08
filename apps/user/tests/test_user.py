@@ -3,7 +3,7 @@ import pytest
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 
-from utils import create_user
+from apps.user.tests.utils import create_user
 
 from apps.core.models import Profile
 
