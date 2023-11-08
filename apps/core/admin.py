@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
 from .forms import CustomUserCreationForm, CustomUserChangeForm
-from .models import CustomUser, Profile
+from .models import CustomUser, Profile, Post, Tag
 
 
 class CustomUserAdmin(UserAdmin):
@@ -17,7 +17,8 @@ class CustomUserAdmin(UserAdmin):
     fieldsets = (
         (None, {'fields': ('username', 'email', 'password')}),
         ('Permissions', {'fields': ('is_staff', 'is_active',
-                                    'is_superuser', 'groups', 'user_permissions')}),
+                                    'is_superuser', 'groups',
+                                    'user_permissions')}),
     )
     add_fieldsets = (
         (None, {
@@ -32,3 +33,5 @@ class CustomUserAdmin(UserAdmin):
 
 admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(Profile)
+admin.site.register(Post)
+admin.site.register(Tag)

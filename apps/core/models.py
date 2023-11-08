@@ -4,6 +4,12 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 
+STATUS = (
+    (0, 'Draft'),
+    (1, 'Publish')
+)
+
+
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, username, password, **extra_fields):
         if not email:
@@ -55,11 +61,36 @@ class Profile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     bio = models.TextField(blank=True, null=True)
     website = models.CharField(max_length=255, blank=True, null=True)
-    picture = models.ImageField(default='default.jpg', upload_to='profile_pics')
-
-    class Meta:
-        verbose_name = 'Profile'
-        verbose_name_plural = 'Profiles'
+    picture = models.ImageField(default='default.jpg',
+                                upload_to='profile_pics')
 
     def __str__(self):
         return f"{self.user} Profile"
+
+    def no_of_posts(self):
+        return self.posts.count()
+
+
+class Tag(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Post(models.Model):
+    title = models.CharField(max_length=255, unique=True)
+    slug = models.SlugField(max_length=255, unique=True)
+    body = models.TextField()
+    author = models.ForeignKey(Profile, on_delete=models.PROTECT,
+                               related_name='posts')
+    status = models.CharField(choices=STATUS, default=0)
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
+    tags = models.ManyToManyField(Tag, blank=True)
+
+    class Meta:
+        ordering = ['-created_on']
+
+    def __str__(self):
+        return self.title
