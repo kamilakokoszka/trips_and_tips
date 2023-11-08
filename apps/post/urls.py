@@ -1,0 +1,8 @@
+"""
+URLs for post app.
+"""
+from django.urls import path
+
+app_name = 'post'
+
+urlpatterns = []
