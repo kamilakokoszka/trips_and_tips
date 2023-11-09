@@ -1,22 +1,20 @@
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import PermissionDenied
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 
 from django.views import View
 from django.views.generic import (
-    CreateView,
-    TemplateView,
-    DeleteView,
     ListView,
     DetailView,
-    FormView
+    FormView, UpdateView
 )
 
 from apps.core.models import Post, Profile
-from apps.post.forms import PostCreateForm
+from apps.post.forms import PostForm
 
 User = get_user_model()
 
@@ -47,27 +45,32 @@ class UserPostsListView(LoginRequiredMixin, ListView):
         return context
 
 
-class PostCreateView(LoginRequiredMixin, View):
+class PostCreateView(LoginRequiredMixin, FormView):
     template_name = 'post/create.html'
+    form_class = PostForm
     success_url = reverse_lazy('post:user-posts')
 
-    def get(self, request):
-        form = PostCreateForm()
-        return render(request, self.template_name, {'form': form})
+    def form_valid(self, form):
+        post = form.save(commit=False)
+        profile = Profile.objects.get(user=self.request.user)
+        post.author = profile
+        post.status = 1 if 'publish' in self.request.POST else 0
+        post.save()
+        return super().form_valid(form)
 
-    def post(self, request, *args, **kwargs):
-        form = PostCreateForm(request.POST)
-        if form.is_valid():
-            post = form.save(commit=False)
-            profile = Profile.objects.get(user=request.user)
-            post.author = profile
-            if 'publish' in request.POST:
-                post.status = 1
-            else:
-                post.status = 0
-            form.save()
-            return redirect(self.success_url)
 
-        return render(request, self.template_name, {'form': form})
+"""class PublishedPostUpdateView(LoginRequiredMixin, UpdateView):
+    model = Post
+    template_name = 'post/update.html'
+    context_object_name = 'post'
+    form_class = PostCreateForm
+
+    def get_object(self, request, *args, **kwargs):
+        obj = super().get_object(*args, **kwargs)
+        profile = Profile.objects.get(user=request.user)
+        if obj.author != profile:
+            raise PermissionDenied()
+        return obj"""
+
 
 
