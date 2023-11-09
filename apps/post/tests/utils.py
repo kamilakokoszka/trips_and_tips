@@ -12,12 +12,15 @@ def create_sample_profile(user, **params):
         'bio': 'Sample bio',
         'website': 'test.com'
     }
+    data.update(**params)
+    profile = Profile.objects.create(**data)
+    return profile
 
 
 def create_sample_post(**params):
     """Create and return a sample post."""
     user = User.objects.first()
-    create_sample_profile(user)
+    #create_sample_profile(user)
     profile = Profile.objects.first()
     data = {
         'title': 'Sample post title',
