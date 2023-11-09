@@ -78,3 +78,33 @@ def test_user_post_list_limited_to_user(client, user):
     assert response.status_code == 200
     assert Post.objects.count() == 2
     assert response.context['user_posts'].count() == 1
+
+
+# PostCreateView tests
+@pytest.mark.django_db
+def test_create_post_view(client, user):
+    """Test post is created with valid data."""
+    client.login(email='test@example.com', password='Testpass123')
+    profile = user.profile
+
+    url = reverse('post:create')
+    response = client.get(url)
+
+    assert response.status_code == 200
+
+    data = {
+        'title': 'Post title',
+        'slug': 'post-title',
+        'body': 'xyz',
+        'publish': 'Publish'
+    }
+
+    response = client.post(url, data)
+
+    assert response.status_code == 302
+    assert Post.objects.filter(title=data['title']).exists()
+
+    post = Post.objects.get(title=data['title'])
+
+    assert int(post.status) == 1
+    assert post.author == profile
