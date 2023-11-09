@@ -14,8 +14,8 @@ from django.views.generic import (
     DetailView,
 )
 
-from apps.core.models import Post
-
+from apps.core.models import Post, Profile
+from apps.post.forms import PostCreateForm
 
 User = get_user_model()
 
@@ -33,3 +33,14 @@ class PostDetailView(DetailView):
     model = Post
     template_name = 'post/details.html'
 
+
+class UserPostsListView(LoginRequiredMixin, ListView):
+    model = Post
+    template_name = 'post/user_posts.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        profile = Profile.objects.get(user=user)
+        context['user_posts'] = Post.objects.filter(author=profile).order_by('-created_on')
+        return context

@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{%  block content %}
+    {% if not posts %}
+        <div>
+            There are no posts yet.
+        </div>
+    {% else %}
+        {% for post in posts %}
+            <h2>{{ post.title }}</h2>
+            {%  if post.status == 1 %}
+                <a href="">Read</a>
+                <a href="">Update</a>
+            {% elif post.status == 0 %}
+                <a href="">Update draft</a>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+{% endblock %}
