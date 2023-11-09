@@ -58,7 +58,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE,
+                                related_name='profile')
     bio = models.TextField(blank=True, null=True)
     website = models.CharField(max_length=255, blank=True, null=True)
     picture = models.ImageField(default='default.jpg',
@@ -87,7 +88,7 @@ class Post(models.Model):
     status = models.CharField(choices=STATUS, default=0)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
-    tags = models.ManyToManyField(Tag, blank=True)
+    tags = models.ManyToManyField(Tag, blank=True, related_name='posts_with_tag')
 
     class Meta:
         ordering = ['-created_on']
