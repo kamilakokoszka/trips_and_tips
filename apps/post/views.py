@@ -3,10 +3,9 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 
-from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse_lazy
+from django.shortcuts import redirect
+from django.urls import reverse_lazy, reverse
 
-from django.views import View
 from django.views.generic import (
     ListView,
     DetailView,
@@ -41,7 +40,9 @@ class UserPostsListView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         user = self.request.user
         profile = Profile.objects.get(user=user)
-        context['user_posts'] = Post.objects.filter(author=profile).order_by('-created_on')
+        context['user_posts'] = (Post.objects
+                                 .filter(author=profile)
+                                 .order_by('-created_on'))
         return context
 
 
@@ -59,18 +60,29 @@ class PostCreateView(LoginRequiredMixin, FormView):
         return super().form_valid(form)
 
 
-"""class PublishedPostUpdateView(LoginRequiredMixin, UpdateView):
+class PublishedPostUpdateView(LoginRequiredMixin, UpdateView):
     model = Post
+    form_class = PostForm
     template_name = 'post/update.html'
     context_object_name = 'post'
-    form_class = PostCreateForm
 
-    def get_object(self, request, *args, **kwargs):
+    def get_success_url(self):
+        return reverse('post:details', kwargs={'slug': self.object.slug})
+
+    def get_object(self, *args, **kwargs):
         obj = super().get_object(*args, **kwargs)
-        profile = Profile.objects.get(user=request.user)
+        profile = Profile.objects.get(user=self.request.user)
         if obj.author != profile:
             raise PermissionDenied()
-        return obj"""
+        return obj
 
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if int(self.object.status) == 1:
+            return super().get(request, *args, **kwargs)
+        else:
+            return redirect('post:user-posts')
 
-
+    def form_valid(self, form):
+        messages.success(self.request, 'The post was updated successfully.')
+        return super(PublishedPostUpdateView, self).form_valid(form)
