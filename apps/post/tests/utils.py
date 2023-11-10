@@ -20,8 +20,7 @@ def create_sample_profile(user, **params):
 def create_sample_post(**params):
     """Create and return a sample post."""
     user = User.objects.first()
-    #create_sample_profile(user)
-    profile = Profile.objects.first()
+    profile = Profile.objects.get(user=user)
     data = {
         'title': 'Sample post title',
         'slug': 'sample-post-title',
