@@ -32,3 +32,20 @@ def create_sample_post(**params):
 
     post = Post.objects.create(**data)
     return post
+
+
+def create_sample_draft(**params):
+    """Create and return a sample post draft."""
+    user = User.objects.first()
+    profile = Profile.objects.get(user=user)
+    data = {
+        'title': 'Sample draft title',
+        'slug': 'sample-draft-title',
+        'body': 'xyzxyz',
+        'author': profile,
+        'status': 0
+    }
+    data.update(params)
+
+    draft = Post.objects.create(**data)
+    return draft

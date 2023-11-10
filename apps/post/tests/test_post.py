@@ -2,7 +2,7 @@ import pytest
 
 from django.contrib.auth import get_user_model
 from django.urls import reverse
-from apps.post.tests.utils import create_sample_post
+from apps.post.tests.utils import create_sample_post, create_sample_draft
 
 from apps.core.models import Post, Profile
 
@@ -106,7 +106,36 @@ def test_create_post_view(client, user):
 
     post = Post.objects.get(title=data['title'])
 
-    assert int(post.status) == 1
+    assert post.status == '1'
+    assert post.author == profile
+
+
+@pytest.mark.django_db
+def test_create_draft_view(client, user):
+    """Test post draft is created with valid data."""
+    client.login(email='test@example.com', password='Testpass123')
+    profile = user.profile
+
+    url = reverse('post:create')
+    response = client.get(url)
+
+    assert response.status_code == 200
+
+    data = {
+        'title': 'Post title',
+        'slug': 'post-title',
+        'body': 'xyz',
+        'save_draft': 'Save draft'
+    }
+
+    response = client.post(url, data)
+
+    assert response.status_code == 302
+    assert Post.objects.filter(title=data['title']).exists()
+
+    post = Post.objects.get(title=data['title'])
+
+    assert post.status == '0'
     assert post.author == profile
 
 
@@ -131,3 +160,50 @@ def test_post_update(client, user):
     post.refresh_from_db()
     assert post.slug == data['slug']
     assert post.body == data['body']
+
+
+@pytest.mark.django_db
+def test_draft_update(client, user):
+    """Test post draft update with valid data."""
+    client.login(email='test@example.com', password='Testpass123')
+    create_sample_draft()
+    draft = Post.objects.first()
+
+    url = reverse('post:update', kwargs={'pk': draft.pk})
+
+    data = {
+        'title': 'Different draft title',
+        'slug': 'different-draft-tile',
+        'body': 'abcabc',
+        'save_draft': 'Save draft'
+    }
+    response = client.post(url, data)
+
+    assert response.status_code == 302
+    draft.refresh_from_db()
+    assert draft.status == '0'
+    assert draft.slug == data['slug']
+    assert draft.body == data['body']
+
+
+@pytest.mark.django_db
+def test_draft_publish(client, user):
+    """Test post draft is published after update."""
+    client.login(email='test@example.com', password='Testpass123')
+    create_sample_draft()
+    draft = Post.objects.first()
+
+    url = reverse('post:update', kwargs={'pk': draft.pk})
+
+    data = {
+        'title': 'Different draft title',
+        'slug': 'different-draft-tile',
+        'body': 'abcabc',
+        'publish': 'Publish'
+    }
+    response = client.post(url, data)
+
+    assert response.status_code == 302
+    draft.refresh_from_db()
+    assert draft.status == '1'
+    assert draft.slug == data['slug']
