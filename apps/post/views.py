@@ -60,7 +60,7 @@ class PostCreateView(LoginRequiredMixin, FormView):
         return super().form_valid(form)
 
 
-class PublishedPostUpdateView(LoginRequiredMixin, UpdateView):
+"""class PublishedPostUpdateView(LoginRequiredMixin, UpdateView):
     model = Post
     form_class = PostForm
     template_name = 'post/update.html'
@@ -86,3 +86,67 @@ class PublishedPostUpdateView(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         messages.success(self.request, 'The post was updated successfully.')
         return super(PublishedPostUpdateView, self).form_valid(form)
+
+
+class DraftUpdateView(LoginRequiredMixin, UpdateView):
+    model = Post
+    form_class = PostForm
+    template_name = 'post/draft.html'
+    context_object_name = 'draft'
+    success_url = reverse('post:user-posts')
+
+    def get_object(self, *args, **kwargs):
+        obj = super().get_object(*args, **kwargs)
+        profile = Profile.objects.get(user=self.request.user)
+        if obj.author != profile:
+            raise PermissionDenied()
+        return obj
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if int(self.object.status) == 0:
+            return super().get(request, *args, **kwargs)
+        else:
+            return redirect('post:user-posts')
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Post draft updated successfully.')
+        return super(DraftUpdateView, self).form_valid(form)"""
+
+
+class PostUpdateView(LoginRequiredMixin, UpdateView):
+    model = Post
+    form_class = PostForm
+    template_name = 'post/update.html'
+    context_object_name = 'post'
+
+    def get_object(self, *args, **kwargs):
+        obj = super().get_object(*args, **kwargs)
+        profile = Profile.objects.get(user=self.request.user)
+        if obj.author != profile:
+            raise PermissionDenied()
+        return obj
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if self.object.status == '1':
+            return super().get(request, *args, **kwargs)
+        elif self.object.status == '0':
+            self.template_name = 'post/draft.html'
+        else:
+            return redirect('post:user-posts')
+
+    def form_valid(self, form):
+        if self.object.status == '1':
+            messages.success(self.request, 'The post was updated successfully.')
+        elif self.object.status == '0':
+            self.object.status = 1 if 'publish' in self.request.POST else 0
+            self.object.save()
+            messages.success(self.request, 'Post draft updated successfully.')
+        return super(PostUpdateView, self).form_valid(form)
+
+    def get_success_url(self):
+        if self.object.status == '1':
+            return reverse('post:details', kwargs={'slug': self.object.slug})
+        else:
+            return reverse('post:user-posts')
