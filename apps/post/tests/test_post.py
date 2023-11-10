@@ -207,3 +207,19 @@ def test_draft_publish(client, user):
     draft.refresh_from_db()
     assert draft.status == '1'
     assert draft.slug == data['slug']
+
+
+# PostDeleteView tests
+@pytest.mark.django_db
+def test_post_delete_successful(client, user):
+    """Test post is deleted successfully."""
+    client.login(email='test@example.com', password='Testpass123')
+    create_sample_post()
+    post = Post.objects.first()
+
+    url = reverse('post:delete', kwargs={'pk': post.pk})
+
+    response = client.post(url)
+
+    assert response.status_code == 302
+    assert not Post.objects.filter(slug=post.slug).exists()
