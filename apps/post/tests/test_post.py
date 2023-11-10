@@ -108,3 +108,26 @@ def test_create_post_view(client, user):
 
     assert int(post.status) == 1
     assert post.author == profile
+
+
+# PostUpdateView tests
+@pytest.mark.django_db
+def test_post_update(client, user):
+    """Test post update with valid data."""
+    client.login(email='test@example.com', password='Testpass123')
+    create_sample_post()
+    post = Post.objects.first()
+
+    url = reverse('post:update', kwargs={'pk': post.pk})
+
+    data = {
+        'title': 'Different title',
+        'slug': 'different-tile',
+        'body': 'abc'
+    }
+    response = client.post(url, data)
+
+    assert response.status_code == 302
+    post.refresh_from_db()
+    assert post.slug == data['slug']
+    assert post.body == data['body']
