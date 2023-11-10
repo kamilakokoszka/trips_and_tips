@@ -9,7 +9,7 @@ from django.urls import reverse_lazy, reverse
 from django.views.generic import (
     ListView,
     DetailView,
-    FormView, UpdateView
+    FormView, UpdateView, DeleteView
 )
 
 from apps.core.models import Post, Profile
@@ -60,60 +60,6 @@ class PostCreateView(LoginRequiredMixin, FormView):
         return super().form_valid(form)
 
 
-"""class PublishedPostUpdateView(LoginRequiredMixin, UpdateView):
-    model = Post
-    form_class = PostForm
-    template_name = 'post/update.html'
-    context_object_name = 'post'
-
-    def get_success_url(self):
-        return reverse('post:details', kwargs={'slug': self.object.slug})
-
-    def get_object(self, *args, **kwargs):
-        obj = super().get_object(*args, **kwargs)
-        profile = Profile.objects.get(user=self.request.user)
-        if obj.author != profile:
-            raise PermissionDenied()
-        return obj
-
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        if int(self.object.status) == 1:
-            return super().get(request, *args, **kwargs)
-        else:
-            return redirect('post:user-posts')
-
-    def form_valid(self, form):
-        messages.success(self.request, 'The post was updated successfully.')
-        return super(PublishedPostUpdateView, self).form_valid(form)
-
-
-class DraftUpdateView(LoginRequiredMixin, UpdateView):
-    model = Post
-    form_class = PostForm
-    template_name = 'post/draft.html'
-    context_object_name = 'draft'
-    success_url = reverse('post:user-posts')
-
-    def get_object(self, *args, **kwargs):
-        obj = super().get_object(*args, **kwargs)
-        profile = Profile.objects.get(user=self.request.user)
-        if obj.author != profile:
-            raise PermissionDenied()
-        return obj
-
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        if int(self.object.status) == 0:
-            return super().get(request, *args, **kwargs)
-        else:
-            return redirect('post:user-posts')
-
-    def form_valid(self, form):
-        messages.success(self.request, 'Post draft updated successfully.')
-        return super(DraftUpdateView, self).form_valid(form)"""
-
-
 class PostUpdateView(LoginRequiredMixin, UpdateView):
     model = Post
     form_class = PostForm
@@ -138,7 +84,8 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         if self.object.status == '1':
-            messages.success(self.request, 'The post was updated successfully.')
+            messages.success(self.request,
+                             'The post was updated successfully.')
         elif self.object.status == '0':
             self.object.status = 1 if 'publish' in self.request.POST else 0
             self.object.save()
@@ -150,3 +97,16 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
             return reverse('post:details', kwargs={'slug': self.object.slug})
         else:
             return reverse('post:user-posts')
+
+
+class PostDeleteView(LoginRequiredMixin, DeleteView):
+    model = Post
+    success_url = reverse_lazy('post:user-posts')
+    template_name = 'post/post_confirm_delete.html'
+
+    def get_object(self, *args, **kwargs):
+        obj = super().get_object(*args, **kwargs)
+        profile = Profile.objects.get(user=self.request.user)
+        if obj.author != profile:
+            raise PermissionDenied()
+        return obj
