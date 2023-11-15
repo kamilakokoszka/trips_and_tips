@@ -26,6 +26,7 @@ def create_sample_post(**params):
         'slug': 'sample-post-title',
         'body': 'xyz',
         'author': profile,
+        'tags': 'tag1',
         'status': 1
     }
     data.update(params)
@@ -43,6 +44,7 @@ def create_sample_draft(**params):
         'slug': 'sample-draft-title',
         'body': 'xyzxyz',
         'author': profile,
+        'tags': 'tag1',
         'status': 0
     }
     data.update(params)
