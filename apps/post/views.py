@@ -3,8 +3,9 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy, reverse
+from django.views import View
 
 from django.views.generic import (
     ListView,
@@ -111,3 +112,12 @@ class PostDeleteView(LoginRequiredMixin, DeleteView):
         if obj.author != profile:
             raise PermissionDenied()
         return obj
+
+
+class FilterPostsByTagView(View):
+    template_name = 'post/tag.html'
+
+    def get(self, request, tag):
+        posts = Post.objects.filter(tags__name__in=[tag]).order_by('-created_on')
+        return render(request, self.template_name,
+                      {'tag': tag, 'posts': posts})
