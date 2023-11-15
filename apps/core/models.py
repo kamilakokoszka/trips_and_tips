@@ -1,7 +1,10 @@
+from django.db import models
+
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
-from django.db import models
+
 from django.utils.translation import gettext_lazy as _
+
 from taggit.managers import TaggableManager
 
 
@@ -69,7 +72,8 @@ class Profile(models.Model):
     def __str__(self):
         return f'{self.user} Profile'
 
-    def no_of_posts(self):
+    @property
+    def number_of_posts(self):
         return self.posts.count()
 
 
@@ -91,11 +95,15 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
+    @property
+    def number_of_comments(self):
+        return self.comments.count()
+
 
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE,
                              related_name='comments')
-    name = models.CharField(max_length=80)
+    author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     body = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True)
 
@@ -103,4 +111,4 @@ class Comment(models.Model):
         ordering = ['created_on']
 
     def __str__(self):
-        return f'Comment by {self.name}'
+        return f'Comment by {self.author}'
