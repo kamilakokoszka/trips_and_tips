@@ -70,6 +70,7 @@ def test_user_post_list_limited_to_user(client, user):
                         slug='sample-post-title-2',
                         body='xyz',
                         author=profile2,
+                        tags='tag1',
                         status=1)
 
     url = reverse('post:user-posts')
@@ -109,7 +110,6 @@ def test_create_post_view(client, user):
 
     assert post.status == '1'
     assert post.author == profile
-    print(post.tags.names())
     assert 'tag1' in post.tags.names()
 
 
@@ -236,3 +236,48 @@ def test_post_delete_successful(client, user):
 
     assert response.status_code == 302
     assert not Post.objects.filter(slug=post.slug).exists()
+
+
+# FilterByTagView tests
+@pytest.mark.django_db
+def test_filtering_posts_by_tag(client):
+    """Test posts with tags are displayed after clicking tag."""
+
+    user = User.objects.create_user(email='test2@example.com',
+                                    username='testuser2',
+                                    password='Testpass123')
+    profile = Profile.objects.get(user=user)
+
+    post1 = Post.objects.create(title='Sample post title 1',
+                        slug='sample-post-title-1',
+                        body='xyz',
+                        author=profile,
+                        status=1)
+    post1.tags.add('tag1')
+
+    post2 = Post.objects.create(title='Sample post title 2',
+                        slug='sample-post-title-2',
+                        body='xyz',
+                        author=profile,
+                        status=1)
+    post2.tags.add('tag2')
+
+    post3 = Post.objects.create(title='Sample post title 3',
+                        slug='sample-post-title-3',
+                        body='xyz',
+                        author=profile,
+                        status=1)
+    post3.tags.add('tag1', 'tag3')
+    tags_for_post = post3.tags.all()
+    print(tags_for_post)
+
+    url = reverse('post:tag', kwargs={'tag': 'tag1'})
+
+    response = client.get(url)
+
+    assert response.status_code == 200
+    assert response.context['tag'] == 'tag1'
+    assert response.context['posts'].count() == 2
+
+
+
