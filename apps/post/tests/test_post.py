@@ -96,7 +96,8 @@ def test_create_post_view(client, user):
         'title': 'Post title',
         'slug': 'post-title',
         'body': 'xyz',
-        'publish': 'Publish'
+        'tags': 'tag1',
+        'publish': 'Publish',
     }
 
     response = client.post(url, data)
@@ -108,6 +109,8 @@ def test_create_post_view(client, user):
 
     assert post.status == '1'
     assert post.author == profile
+    print(post.tags.names())
+    assert 'tag1' in post.tags.names()
 
 
 @pytest.mark.django_db
@@ -125,6 +128,7 @@ def test_create_draft_view(client, user):
         'title': 'Post title',
         'slug': 'post-title',
         'body': 'xyz',
+        'tags': 'tag1',
         'save_draft': 'Save draft'
     }
 
@@ -137,6 +141,7 @@ def test_create_draft_view(client, user):
 
     assert post.status == '0'
     assert post.author == profile
+    assert 'tag1' in post.tags.names()
 
 
 # PostUpdateView tests
@@ -152,7 +157,8 @@ def test_post_update(client, user):
     data = {
         'title': 'Different title',
         'slug': 'different-tile',
-        'body': 'abc'
+        'body': 'abc',
+        'tags': 'tag2'
     }
     response = client.post(url, data)
 
@@ -160,6 +166,8 @@ def test_post_update(client, user):
     post.refresh_from_db()
     assert post.slug == data['slug']
     assert post.body == data['body']
+    assert 'tag2' in post.tags.names()
+    assert 'tag1' not in post.tags.names()
 
 
 @pytest.mark.django_db
@@ -175,6 +183,7 @@ def test_draft_update(client, user):
         'title': 'Different draft title',
         'slug': 'different-draft-tile',
         'body': 'abcabc',
+        'tags': 'tag2',
         'save_draft': 'Save draft'
     }
     response = client.post(url, data)
@@ -184,6 +193,8 @@ def test_draft_update(client, user):
     assert draft.status == '0'
     assert draft.slug == data['slug']
     assert draft.body == data['body']
+    assert 'tag2' in draft.tags.names()
+    assert 'tag1' not in draft.tags.names()
 
 
 @pytest.mark.django_db
@@ -199,6 +210,7 @@ def test_draft_publish(client, user):
         'title': 'Different draft title',
         'slug': 'different-draft-tile',
         'body': 'abcabc',
+        'tags': 'tag1',
         'publish': 'Publish'
     }
     response = client.post(url, data)
@@ -207,6 +219,7 @@ def test_draft_publish(client, user):
     draft.refresh_from_db()
     assert draft.status == '1'
     assert draft.slug == data['slug']
+    assert 'tag1' in draft.tags.names()
 
 
 # PostDeleteView tests
