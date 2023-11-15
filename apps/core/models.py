@@ -83,6 +83,7 @@ class Post(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
     tags = TaggableManager()
+    image = models.ImageField(upload_to='images', null=True, blank=True)
 
     class Meta:
         ordering = ['-created_on']
