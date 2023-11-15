@@ -2,6 +2,7 @@ from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from taggit.managers import TaggableManager
 
 
 STATUS = (
@@ -72,13 +73,6 @@ class Profile(models.Model):
         return self.posts.count()
 
 
-class Tag(models.Model):
-    name = models.CharField(max_length=50, unique=True)
-
-    def __str__(self):
-        return self.name
-
-
 class Post(models.Model):
     title = models.CharField(max_length=255, unique=True)
     slug = models.SlugField(max_length=255, unique=True)
@@ -88,7 +82,7 @@ class Post(models.Model):
     status = models.CharField(choices=STATUS, default=0)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
-    tags = models.ManyToManyField(Tag, blank=True, related_name='posts_with_tag')
+    tags = TaggableManager()
 
     class Meta:
         ordering = ['-created_on']
