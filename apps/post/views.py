@@ -57,6 +57,7 @@ class PostCreateView(LoginRequiredMixin, FormView):
         post.author = profile
         post.status = 1 if 'publish' in self.request.POST else 0
         post.save()
+        form.save_m2m()
         return super().form_valid(form)
 
 
