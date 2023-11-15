@@ -50,15 +50,18 @@ class UserPostsListView(LoginRequiredMixin, ListView):
 class PostCreateView(LoginRequiredMixin, FormView):
     template_name = 'post/create.html'
     form_class = PostForm
-    success_url = reverse_lazy('post:user-posts')
 
     def form_valid(self, form):
+
         post = form.save(commit=False)
         profile = Profile.objects.get(user=self.request.user)
         post.author = profile
         post.status = 1 if 'publish' in self.request.POST else 0
         post.save()
         form.save_m2m()
+
+        self.success_url = reverse_lazy('post:details',
+                                        kwargs={'slug': post.slug})
         return super().form_valid(form)
 
 
@@ -118,6 +121,8 @@ class FilterPostsByTagView(View):
     template_name = 'post/tag.html'
 
     def get(self, request, tag):
-        posts = Post.objects.filter(tags__name__in=[tag]).order_by('-created_on')
+        posts = (Post.objects
+                 .filter(tags__name__in=[tag])
+                 .order_by('-created_on'))
         return render(request, self.template_name,
                       {'tag': tag, 'posts': posts})

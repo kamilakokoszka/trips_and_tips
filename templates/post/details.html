@@ -3,5 +3,9 @@
 {%  block content %}
     <h2>{{ post.title }}</h2>
     <p>{{ post.author }} | {{ post.created_on }}</p>
-    <p>{{ post.body }}</p>
+    {% if post.image %}
+        <img src="{{ post.image.url }}" height="500">
+    {% endif %}
+        <p>{{ post.body }}</p>
+
 {% endblock %}
