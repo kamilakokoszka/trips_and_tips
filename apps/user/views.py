@@ -9,7 +9,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 
 from django.views import View
 from django.views.generic import CreateView, TemplateView, DeleteView
@@ -125,12 +125,13 @@ class UserProfileUpdateView(LoginRequiredMixin, View):
 
     def post(self, request):
         form = ProfileUpdateForm(request.POST,
+                                 request.FILES,
                                  instance=request.user.profile)
         if form.is_valid():
             form.save()
             messages.success(request, 'Your profile has been updated!')
-            return redirect(reverse_lazy('user:profile',
-                                         args=[request.user.pk]))
+            return redirect(reverse('user:profile',
+                                    args=[request.user.pk]))
         else:
             messages.error(request, 'Please correct the error below.')
 
