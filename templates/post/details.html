@@ -8,4 +8,17 @@
     {% endif %}
         <p>{{ post.body }}</p>
 
+    {% for comment in comments %}
+        {{ comment.author }}
+        {{ comment.created_on }}
+        {{ comment.body }}
+    {% endfor %}
+    <div>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Add comment</button>
+        </form>
+    </div>
+
 {% endblock %}

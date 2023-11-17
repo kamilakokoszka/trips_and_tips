@@ -2,8 +2,9 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
+from django.http import HttpResponseRedirect
 
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.views import View
 
@@ -14,7 +15,7 @@ from django.views.generic import (
 )
 
 from apps.core.models import Post, Profile
-from apps.post.forms import PostForm
+from apps.post.forms import PostForm, CommentForm
 
 User = get_user_model()
 
@@ -31,6 +32,28 @@ class PostListView(ListView):
 class PostDetailView(DetailView):
     model = Post
     template_name = 'post/details.html'
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(Post, slug=self.kwargs['slug'])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['comments'] = self.object.comments.all()
+        context['form'] = CommentForm
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = CommentForm(request.POST)
+
+        if form.is_valid():
+            new_comment = form.save(commit=False)
+            new_comment.author = request.user
+            new_comment.post = self.object
+            new_comment.save()
+            return HttpResponseRedirect(self.request.path_info)
+
+        return self.render_to_response(self.get_context_data(form=form))
 
 
 class UserPostsListView(LoginRequiredMixin, ListView):
@@ -117,6 +140,7 @@ class PostDeleteView(LoginRequiredMixin, DeleteView):
         return obj
 
 
+# ------- Tags views ------- #
 class FilterPostsByTagView(View):
     template_name = 'post/tag.html'
 
