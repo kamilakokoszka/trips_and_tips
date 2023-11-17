@@ -20,14 +20,16 @@ from apps.post.forms import PostForm, CommentForm
 User = get_user_model()
 
 
-# ------- Post views ------- #
+# ------- Home page ------- #
 
 class PostListView(ListView):
     queryset = Post.objects.filter(status=1).order_by('-created_on')
-    template_name = 'post/list.html'
+    template_name = 'home_page.html'
     paginate_by = 5
     context_object_name = 'posts'
 
+
+# ------- Post views ------- #
 
 class PostDetailView(DetailView):
     model = Post

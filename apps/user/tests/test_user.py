@@ -11,31 +11,7 @@ User = get_user_model()
 CREATE_USER_URL = reverse('user:register')
 
 
-# Home page tests
-@pytest.mark.django_db
-def test_home_page_authorized(client, user):
-    """Test proper home page template is displayed to authenticated user."""
-    client.force_login(user)
-    url = reverse('user:home-page')
-    response = client.get(url)
-
-    assert response.status_code == 200
-    assert 'home_page.html' in [
-        template.name for template in response.templates]
-
-
-@pytest.mark.django_db
-def test_home_page_unauthorized(client):
-    """Test proper home page template is displayed to unauthenticated user."""
-    url = reverse('user:home-page')
-    response = client.get(url)
-
-    assert response.status_code == 200
-    assert 'home_unauthenticated.html' in [
-        template.name for template in response.templates]
-
-
-# -----USER TESTS -----
+# ----- USER TESTS ----- #
 
 # UserRegistrationView tests
 @pytest.mark.django_db
@@ -117,7 +93,7 @@ def test_login_invalid_data(client, user):
     assert not response.wsgi_request.user.is_authenticated
 
 
-# UserLogoutView test
+# UserLogoutView tests
 @pytest.mark.django_db
 def test_logout_successful(client, user):
     """Test logging out is successful."""
@@ -128,7 +104,7 @@ def test_logout_successful(client, user):
     assert not response.wsgi_request.user.is_authenticated
 
 
-# UserSettingsView test
+# UserSettingsView tests
 @pytest.mark.django_db
 def test_user_settings(client, user):
     """Test user settings template is displayed correctly."""
@@ -180,7 +156,6 @@ def test_change_password_too_short(client, user):
 
 
 # UserDeleteView tests
-
 @pytest.mark.django_db
 def test_user_delete_successful(client, user):
     """Test user is deleted successfully."""
@@ -193,10 +168,9 @@ def test_user_delete_successful(client, user):
     assert not User.objects.filter(username='testuser').exists()
 
 
-# -----PROFILE TESTS -----
+# ----- PROFILE TESTS ----- #
 
 # UserProfileView tests
-
 @pytest.mark.django_db
 def test_user_profile_view(client, user):
     """Test user profile is displayed correctly."""

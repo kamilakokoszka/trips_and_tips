@@ -22,12 +22,6 @@ from apps.core.models import Profile
 User = get_user_model()
 
 
-def home_page(request):
-    if request.user.is_authenticated:
-        return render(request, 'home_page.html')
-    return render(request, 'home_unauthenticated.html')
-
-
 # ------- User views ------- #
 
 class UserRegistrationView(CreateView):
@@ -35,7 +29,7 @@ class UserRegistrationView(CreateView):
     template_name = 'user/registration.html'
 
     def get_success_url(self):
-        return reverse_lazy('user:home-page')
+        return reverse_lazy('home-page')
 
     def form_valid(self, form):
         form.save()
@@ -61,7 +55,7 @@ class UserLoginView(View):
             user = authenticate(request, email=email, password=password)
             if user:
                 login(request, user)
-                return redirect(reverse_lazy('user:home-page'))
+                return redirect(reverse_lazy('home-page'))
 
         return render(request, self.template_name, {'form': form})
 
@@ -69,7 +63,7 @@ class UserLoginView(View):
 class UserLogoutView(LoginRequiredMixin, View):
     def get(self, request):
         logout(request)
-        return redirect(reverse_lazy('user:home-page'))
+        return redirect(reverse_lazy('home-page'))
 
 
 class UserSettingsView(LoginRequiredMixin, TemplateView):
@@ -99,7 +93,7 @@ class UserPasswordChangeView(LoginRequiredMixin, View):
 
 class UserDeleteView(LoginRequiredMixin, DeleteView):
     model = User
-    success_url = reverse_lazy('user:home-page')
+    success_url = reverse_lazy('home-page')
     template_name = 'user/user_confirm_delete.html'
 
 

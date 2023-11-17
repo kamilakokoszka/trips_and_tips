@@ -18,14 +18,14 @@ def test_post_list_view(client, user):
     client.login(email='test@example.com', password='Testpass123')
     create_sample_post()
 
-    url = reverse('post:list')
+    url = reverse('home-page')
     response = client.get(url)
 
     assert response.status_code == 200
     assert response.context['posts'].count() == 1
 
 
-# PostDetailView test
+# PostDetailView tests
 @pytest.mark.django_db
 def test_post_detail_view(client, user):
     """Test post detail view is displayed correctly."""
@@ -278,7 +278,7 @@ def test_filtering_posts_by_tag(client):
 
 # ----- COMMENT TESTS ----- #
 
-# Comments test
+# Comments tests
 @pytest.mark.django_db
 def test_add_comment(client, user):
     """Test comment is created."""

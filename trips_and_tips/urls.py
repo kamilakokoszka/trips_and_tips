@@ -19,9 +19,12 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+from apps.post.views import PostListView
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', PostListView.as_view(), name='home-page'),
     path('user/', include('apps.user.urls')),
     path('post/', include('apps.post.urls')),
 ]
