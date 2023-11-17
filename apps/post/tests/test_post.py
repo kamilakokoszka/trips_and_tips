@@ -9,7 +9,7 @@ from apps.core.models import Post, Profile
 User = get_user_model()
 
 
-#  ----- POST TESTS -----
+# ----- POST TESTS ----- #
 
 # PostListView tests
 @pytest.mark.django_db
@@ -33,7 +33,7 @@ def test_post_detail_view(client, user):
     create_sample_post()
     post = Post.objects.first()
 
-    url = reverse('post:details', args=[post.slug])
+    url = reverse('post:details', kwargs={'slug': post.slug})
     response = client.get(url)
 
     assert response.status_code == 200
@@ -105,9 +105,7 @@ def test_create_post_view(client, user):
 
     assert response.status_code == 302
     assert Post.objects.filter(title=data['title']).exists()
-
     post = Post.objects.get(title=data['title'])
-
     assert post.status == '1'
     assert post.author == profile
     assert 'tag1' in post.tags.names()
@@ -136,9 +134,7 @@ def test_create_draft_view(client, user):
 
     assert response.status_code == 302
     assert Post.objects.filter(title=data['title']).exists()
-
     post = Post.objects.get(title=data['title'])
-
     assert post.status == '0'
     assert post.author == profile
     assert 'tag1' in post.tags.names()
@@ -249,24 +245,24 @@ def test_filtering_posts_by_tag(client):
     profile = Profile.objects.get(user=user)
 
     post1 = Post.objects.create(title='Sample post title 1',
-                        slug='sample-post-title-1',
-                        body='xyz',
-                        author=profile,
-                        status=1)
+                                slug='sample-post-title-1',
+                                body='xyz',
+                                author=profile,
+                                status=1)
     post1.tags.add('tag1')
 
     post2 = Post.objects.create(title='Sample post title 2',
-                        slug='sample-post-title-2',
-                        body='xyz',
-                        author=profile,
-                        status=1)
+                                slug='sample-post-title-2',
+                                body='xyz',
+                                author=profile,
+                                status=1)
     post2.tags.add('tag2')
 
     post3 = Post.objects.create(title='Sample post title 3',
-                        slug='sample-post-title-3',
-                        body='xyz',
-                        author=profile,
-                        status=1)
+                                slug='sample-post-title-3',
+                                body='xyz',
+                                author=profile,
+                                status=1)
     post3.tags.add('tag1', 'tag3')
     tags_for_post = post3.tags.all()
     print(tags_for_post)
@@ -280,4 +276,23 @@ def test_filtering_posts_by_tag(client):
     assert response.context['posts'].count() == 2
 
 
+# ----- COMMENT TESTS ----- #
 
+# Comments test
+@pytest.mark.django_db
+def test_add_comment(client, user):
+    """Test comment is created."""
+    client.login(email='test@example.com', password='Testpass123')
+    create_sample_post()
+    post = Post.objects.first()
+
+    url = reverse('post:details', kwargs={'slug': post.slug})
+
+    data = {'body': 'Sample comment.'}
+    response = client.post(url, data, follow=True)
+
+    assert response.status_code == 200
+    assert 'form' in response.context
+    assert 'comments' in response.context
+    assert response.context['comments'].count() == 1
+    assert response.context['comments'].first().author == user
