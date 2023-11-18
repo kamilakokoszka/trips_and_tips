@@ -83,7 +83,7 @@ class Post(models.Model):
     body = models.TextField()
     author = models.ForeignKey(Profile, on_delete=models.PROTECT,
                                related_name='posts')
-    status = models.CharField(choices=STATUS, default=0)
+    status = models.CharField(choices=STATUS)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
     tags = TaggableManager()
