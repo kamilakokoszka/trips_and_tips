@@ -31,7 +31,21 @@ class CustomUserAdmin(UserAdmin):
     ordering = ('email',)
 
 
+class ProfileAdmin(admin.ModelAdmin):
+    search_fields = ['bio', 'website']
+
+
+class PostAdmin(admin.ModelAdmin):
+    list_display = ('title', 'slug', 'created_on', 'author')
+    search_fields = ['title', 'body']
+
+
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ('__str__', 'post', 'created_on')
+    search_fields = ['body']
+
+
 admin.site.register(CustomUser, CustomUserAdmin)
-admin.site.register(Profile)
-admin.site.register(Post)
-admin.site.register(Comment)
+admin.site.register(Profile, ProfileAdmin)
+admin.site.register(Post, PostAdmin)
+admin.site.register(Comment, CommentAdmin)
