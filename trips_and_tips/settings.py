@@ -43,8 +43,15 @@ INSTALLED_APPS = [
     'apps.core',
     'apps.user',
     'apps.post',
-    'taggit'
+    'taggit',
+    'bootstrap4',
+    'crispy_forms',
+    'crispy_bootstrap4'
 ]
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap4'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
