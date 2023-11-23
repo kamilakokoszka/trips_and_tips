@@ -4,13 +4,14 @@
 {% block content %}
     <div class="container">
         <div class="col-md-8 card mb-4 mt-3 top mx-auto">
-            <h1 class="card-title">Update draft</h1>
-            <form method="post" enctype="multipart/form-data">
+            <h2 class="card-title">Confirm deletion</h2>
+            <p class="mx-auto">Are you sure you want to delete your post?</p>
+            <form method="post">
                 {% csrf_token %}
                 {{ form|crispy }}
                 <div class="text-center" style="margin-bottom: 10px;">
-                    <button class="btn btn-outline-primary" type="submit" name="publish">Publish</button>
-                    <button class="btn btn-outline-primary" type="submit" name="save_draft">Update draft</button>
+                    <button class="btn btn-outline-danger" type="submit" value="Delete">Delete</button>
+                    <a class="btn btn-outline-primary" href="{% url 'post:user-posts' %}">Cancel</a>
                 </div>
             </form>
         </div>
