@@ -1,19 +1,30 @@
 {% extends 'base.html' %}
 
 {%  block content %}
-    {% if not posts %}
-        <div>
-            There are no posts yet.
+    <div class="container">
+        <div class="col-md-8 card mb-4 mt-3 top mx-auto">
+            <table class="table">
+                <tbody>
+                    {% if not user_posts %}
+                        <td>There are no posts yet.</td>
+                    {% else %}
+                        {% for post in user_posts %}
+                            <tr>
+                                <td><strong>{{ post.title }}</strong></td>
+                                <td class="right">
+                                {%  if post.status == '1' %}
+                                    <a class="btn btn-outline-primary" href="{% url 'post:details' slug=post.slug %}">Read</a>
+                                    <a class="btn btn-outline-primary" href="{% url 'post:update' pk=post.pk %}">Update</a>
+                                    <a class="btn btn-outline-danger" href="{% url 'post:delete' pk=post.pk %}">Delete</a>
+                                {% elif post.status == '0' %}
+                                    <a class="btn btn-outline-primary" href="{% url 'post:update' pk=post.pk %}">Update draft</a>
+                                {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
         </div>
-    {% else %}
-        {% for post in posts %}
-            <h2>{{ post.title }}</h2>
-            {%  if post.status == 1 %}
-                <a href="">Read</a>
-                <a href="">Update</a>
-            {% elif post.status == 0 %}
-                <a href="">Update draft</a>
-            {% endif %}
-        {% endfor %}
-    {% endif %}
+    </div>
 {% endblock %}
