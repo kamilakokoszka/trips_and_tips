@@ -4,7 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
 
-from django.shortcuts import redirect, render, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.views import View
 
@@ -77,7 +77,6 @@ class PostCreateView(LoginRequiredMixin, FormView):
     form_class = PostForm
 
     def form_valid(self, form):
-
         post = form.save(commit=False)
         profile = Profile.objects.get(user=self.request.user)
         post.author = profile
@@ -85,8 +84,12 @@ class PostCreateView(LoginRequiredMixin, FormView):
         post.save()
         form.save_m2m()
 
-        self.success_url = reverse_lazy('post:details',
-                                        kwargs={'slug': post.slug})
+        if 'publish' in self.request.POST:
+            self.success_url = reverse_lazy('post:details',
+                                            kwargs={'slug': post.slug})
+        else:
+            self.success_url = reverse_lazy('post:user-posts')
+
         return super().form_valid(form)
 
 
@@ -109,8 +112,7 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
             return super().get(request, *args, **kwargs)
         elif self.object.status == '0':
             self.template_name = 'post/draft.html'
-        else:
-            return redirect('post:user-posts')
+            return super().get(request, *args, **kwargs)
 
     def form_valid(self, form):
         if self.object.status == '1':
