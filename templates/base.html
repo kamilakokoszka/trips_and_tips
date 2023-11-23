@@ -1,9 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Trips & tips</title>
-</head>
-    {% block content %}
-    {% endblock %}
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Trips & tips</title>
+        <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet">
+        <meta name="google" content="notranslate" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+              crossorigin="anonymous">
+    </head>
+
+    <body>
+        <style>
+            body, html {
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            body {
+
+                -webkit-background-size: cover;
+                -moz-background-size: cover;
+                -o-background-size: cover;
+                background-size: cover;
+            }
+            .shadow {
+                box-shadow: 0 4px 2px -2px rgba(0, 0, 0, 0.1);
+            }
+            .masthead {
+                background: url("https://iili.io/JooxcMX.jpg") center center fixed;
+                height: auto;
+                padding-bottom: 15px;
+                padding-top: 10px;
+            }
+            .navbar {
+                background-color: rgba(83, 106, 115, 1);
+            }
+            .card {
+                background-color: rgba(83, 106, 115, 0.1);
+            }
+            .card-header {
+                color: #536A73;
+                text-align: center;
+            }
+            body {
+            font-family: "Roboto", sans-serif;
+            font-size: 16px;
+            background-color: #fdfdfd;
+            }
+        </style>
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-expand-lg navbar-dark shadow">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="{% url 'home-page' %}">Trips & Tips</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    {% if request.user.is_authenticated %}
+                        <ul class="navbar-nav ml-auto">
+                            <li class="nav-item text-black">
+                                <a class="nav-link text-black font-weight-bold" href="{% url 'post:user-posts' %}">Posts</a>
+                            </li>
+                            <li class="nav-item text-black">
+                                <a class="nav-link text-black font-weight-bold" href="{% url 'user:profile' user_id=request.user.id %}">Profile</a>
+                            </li>
+                            <li class="nav-item text-black">
+                                <a class="nav-link text-black font-weight-bold" href="{% url 'user:settings' %}">Settings</a>
+                            </li>
+                            <li class="nav-item text-black">
+                                <a class="nav-link text-black font-weight-bold" href="{% url 'user:logout' %}">Logout</a>
+                            </li>
+                        </ul>
+                    {% else %}
+                        <ul class="navbar-nav ml-auto">
+                            <li class="nav-item text-black">
+                                <a class="nav-link text-black font-weight-bold" href="{% url 'user:register' %}">Register</a>
+                            </li>
+                            <li class="nav-item text-black">
+                                <a class="nav-link text-black font-weight-bold" href="{% url 'user:login' %}">Login</a>
+                            </li>
+                        </ul>
+                    {% endif %}
+                </div>
+            </div>
+        </nav>
+
+        {% block content %}
+        {% endblock %}
+
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+    </body>
 </html>

@@ -1,16 +1,83 @@
 {% extends 'base.html' %}
-
 {%  block content %}
-    {% if not posts %}
-        <div>
-            There are no posts yet.
+    <style>
+
+        .head_text {
+            color: white;
+        }
+        .card-title {
+            color: #536A73;
+            text-align: center;
+        }
+        .card-text {
+            text-align: justify;
+            text-justify: inter-word;
+        }
+        .h6:hover {
+            color: #536A73;
+        }
+        .image {
+            max-width: 100%;
+            object-fit: contain;
+            object-position: center;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+        .btn-outline-primary {
+            color: #536A73;
+            border-color: #536A73;
+            border-radius: 20px;
+        }
+        .btn-outline-primary:hover {
+            background-color: #536A73;
+            border-color: #536A73;
+            color: #ffffff;
+            border-radius: 20px;
+        }
+    </style>
+
+    <header class="masthead">
+        <div class="overlay">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 col-md-10 max-auto">
+                        <div class="site-heading">
+                            <h3 class="site-heading my-4 mt-3 text-white">Welcome to Trips & tips!</h3>
+                            <p class="text-light">We just love the world.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    {% else %}
-        {% for post in posts %}
-            <h2>{{ post.title }}</h2>
-            <p>{{ post.author }} | {{ post.created_on }}</p>
-            <p>{{ post.body|slice:":200" }}</p>
-            <a href="">Read more</a>
-        {% endfor %}
-    {% endif %}
+    </header>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 mt-3 left">
+            {% if not posts %}
+                <div class="card mb-4">
+                    There are no posts yet.
+                </div>
+            {% else %}
+                {% for post in posts %}
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h2 class="card-title">{{ post.title }}</h2>
+                            <a class="card-text text-muted h6" href="{% url 'user:profile' user_id=post.author.user.id %}">{{ post.author.user.username }}</a>
+                                <a class="card-text text-muted h6"> | {{ post.created_on }}</a>
+                            {% if post.image %}
+                               <img class="image" src="{{ post.image.url }}" alt="connect">
+                            {% endif %}
+                            <p class="card-text">{{ post.body|slice:":350" }}...</p>
+                            <div class="text-center">
+                                <a class="btn btn-outline-primary" href="{% url 'post:details' slug=post.slug %}">Read more</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            </div>
+            {% block sidebar %} {% include 'sidebar.html' %} {% endblock sidebar %}
+        </div>
+    </div>
 {% endblock %}
