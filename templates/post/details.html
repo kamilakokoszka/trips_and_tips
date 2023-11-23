@@ -1,24 +1,50 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 
 {%  block content %}
-    <h2>{{ post.title }}</h2>
-    <p>{{ post.author }} | {{ post.created_on }}</p>
-    {% if post.image %}
-        <img src="{{ post.image.url }}" height="500">
-    {% endif %}
-        <p>{{ post.body }}</p>
-
-    {% for comment in comments %}
-        {{ comment.author }}
-        {{ comment.created_on }}
-        {{ comment.body }}
-    {% endfor %}
-    <div>
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Add comment</button>
-        </form>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 card mb-4  mt-3 left top">
+                <div class="card-body">
+                    <h2 class="card-title">{{ post.title }}</h2>
+                    <a class="card-text text-muted h6" href="{% url 'user:profile' user_id=post.author.user.id %}">{{ post.author }}</a>
+                    <a class="card-text text-muted h6">| {{ post.created_on }}
+                    {% if post.updated_on != post.created_on %}
+                        | Update: {{ post.updated_on }}
+                    {% endif %}
+                    </a>
+                    {% if post.image %}
+                        <img class="image" src="{{ post.image.url }}" alt="connect">
+                    {% endif %}
+                        <p class="card-text">{{ post.body }}</p>
+                    <hr>
+                    <h4 class="text-center">Comments</h4>
+                    <hr>
+                    {% for comment in comments %}
+                        <div class="comments" style="padding: 10px;">
+                            <p class="font-weight-bold">
+                                {{ comment.author }}
+                                <span class=" text-muted font-weight-normal">
+                                    {{ comment.created_on }}
+                                </span>
+                            </p>
+                        {{ comment.body | linebreaks }}
+                        </div>
+                        <hr>
+                    {% endfor %}
+                    <div class="card-body">
+                        <h5>Add comment:</h5>
+                        <form method="post" style="margin-top: 1.3em;">
+                            {% csrf_token %}
+                            {{ form|crispy }}
+                            <div class="text-center">
+                                <button class="btn btn-outline-primary" type="submit">Add comment</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% block sidebar %} {% include 'sidebar.html' %} {% endblock sidebar %}
+        </div>
     </div>
-
 {% endblock %}
