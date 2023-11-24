@@ -16,8 +16,7 @@ from django.views.generic import CreateView, TemplateView, DeleteView
 
 from apps.user.forms import UserLoginForm, ProfileUpdateForm
 from apps.core.forms import CustomUserCreationForm
-from apps.core.models import Profile
-
+from apps.core.models import Profile, CustomUser
 
 User = get_user_model()
 
@@ -95,6 +94,10 @@ class UserDeleteView(LoginRequiredMixin, DeleteView):
     model = User
     success_url = reverse_lazy('home-page')
     template_name = 'user/user_confirm_delete.html'
+
+    def get_object(self, queryset=None):
+        obj = get_object_or_404(CustomUser, username=self.request.user.username)
+        return obj
 
 
 # ------- Profile views ------- #
