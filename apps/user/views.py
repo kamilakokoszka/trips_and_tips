@@ -73,7 +73,7 @@ class UserPasswordChangeView(LoginRequiredMixin, View):
     template_name = 'user/change_password.html'
 
     def get(self, request):
-        form = PasswordChangeForm
+        form = PasswordChangeForm(request.user)
         return render(request, self.template_name, {'form': form})
 
     def post(self, request):
