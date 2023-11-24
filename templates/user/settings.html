@@ -1,10 +1,13 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div>
-        <h1>User settings</h1>
-        <a href="">Edit your profile </a>
-        <a href="">Change password</a>
-        <a href="">Delete account</a>
+    <div class="container">
+        <div class="col-md-8 card mb-4 mt-3 top mx-auto">
+            <h2 class="card-title" style="padding-top: 20px">Settings</h2>
+            <hr>
+            <a class="btn btn-outline-primary settings-btn" href="{% url 'user:profile-update' %}">Edit your profile </a>
+            <a class="btn btn-outline-primary settings-btn" href="{% url 'user:password-change' %}">Change password</a>
+            <a class="btn btn-outline-primary settings-btn" href="{% url 'user:delete' pk=request.user.pk %}">Delete account</a>
+        </div>
     </div>
 {% endblock %}
