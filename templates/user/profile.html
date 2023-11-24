@@ -1,10 +1,53 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div>
-        <h1>{{ user.username }}</h1>
-        <img src="{{ profile.image.url }}">
-        <a href="{{ profile.website }}">Website</a>
-        <p>{{ profile.bio }}</p>
-    </div>
+  <div class="profile-container col-md-8 card mb-4 mt-3 top mx-auto">
+      <h2 class="card-title" style="margin-top: 20px">{{ user.username }}</h2>
+      <hr>
+      <div class="row-profile">
+          <div class="column left-column" style="margin-left: 20px">
+              <div class="profile-picture">
+                  <img src="{{ profile.picture.url }}" alt="Profile Picture">
+              </div>
+              <br>
+              {% if profile.website %}
+                  <p>Website:</p>
+                  <a class="link" href="{{ profile.website }}">{{ profile.website }}</a>
+              {% endif %}
+          </div>
+          <div class="column right-column">
+              <div class="profile-details">
+                  <p class="bio">{{ profile.bio }}</p>
+              </div>
+          </div>
+      </div>
+      <hr>
+      <h4 style="padding-bottom: 5px">{{ user.username }}'s posts</h4>
+      <table class="table">
+          <thead>
+              <tr>
+                  <th></th>
+                  <th>Post title</th>
+                  <th>Date of publication</th>
+                  <th></th>
+              </tr>
+          </thead>
+          <tbody>
+              {% if user_posts %}
+                  {% for post in user_posts %}
+                      <tr>
+                          <td>{{ forloop.counter }}</td>
+                          <td>{{ post.title }}</td>
+                          <td>{{ post.created_on }}</td>
+                          <td class="right">
+                              <a class="btn btn-outline-primary" href="{% url 'post:details' slug=post.slug %}">Read</a>
+                          </td>
+                      </tr>
+                  {% endfor %}
+              {% else %}
+                  <p>{{ user.username }} doesn't have any posts yet.</p>
+              {% endif %}
+          </tbody>
+      </table>
+  </div>
 {% endblock %}
