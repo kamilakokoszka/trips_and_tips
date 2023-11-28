@@ -16,7 +16,7 @@ from django.views.generic import CreateView, TemplateView, DeleteView
 
 from apps.user.forms import UserLoginForm, ProfileUpdateForm
 from apps.core.forms import CustomUserCreationForm
-from apps.core.models import Profile, CustomUser
+from apps.core.models import Profile, CustomUser, Post
 
 User = get_user_model()
 
@@ -110,6 +110,7 @@ class UserProfileView(TemplateView):
         user = get_object_or_404(User, id=user_id)
         context['user'] = user
         context['profile'] = get_object_or_404(Profile, user=user)
+        context['user_posts'] = Post.objects.filter(author=user.profile, status=1).order_by('-created_on')
         return context
 
 
