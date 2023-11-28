@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,109 +11,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
               crossorigin="anonymous">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
     </head>
 
     <body>
-        <style>
-            body, html {
-                height: 100%;
-                margin: 0;
-                padding: 0;
-            }
-            body {
-
-                -webkit-background-size: cover;
-                -moz-background-size: cover;
-                -o-background-size: cover;
-                background-size: cover;
-            }
-            .shadow {
-                box-shadow: 0 4px 2px -2px rgba(0, 0, 0, 0.1);
-            }
-            .masthead {
-                background: url("https://iili.io/JooxcMX.jpg") center center fixed;
-                height: auto;
-                padding-bottom: 15px;
-                padding-top: 10px;
-            }
-            .navbar {
-                background-color: rgba(83, 106, 115, 1);
-            }
-            .card {
-                background-color: rgba(83, 106, 115, 0.1);
-            }
-            .card-header {
-                color: #536A73;
-                text-align: center;
-            }
-            body {
-            font-family: "Roboto", sans-serif;
-            font-size: 16px;
-            background-color: #fdfdfd;
-            }
-            .card-title {
-            color: #536A73;
-            text-align: center;
-            }
-            .image {
-                max-width: 100%;
-                object-fit: contain;
-                object-position: center;
-                padding-top: 10px;
-                padding-bottom: 10px;
-            }
-            .card-text {
-            text-align: justify;
-            text-justify: inter-word;
-            }
-            .h6:hover {
-                color: #536A73;
-            }
-            .btn-outline-primary {
-                color: #536A73;
-                border-color: #536A73;
-                border-radius: 20px;
-            }
-            .btn-outline-primary:hover {
-                background-color: #536A73;
-                border-color: #536A73;
-                color: #ffffff;
-                border-radius: 20px;
-            }
-            .btn-primary {
-                background-color: #536A73;
-                border-color: #536A73;
-                border-radius: 20px;
-            }
-            .btn-primary:hover {
-                background-color: rgba(83, 106, 115, 0.1);
-                color: #536A73;
-                border-color: #536A73;
-                border-radius: 20px;
-            }
-            .btn-outline-danger {
-                border-radius: 20px;
-            }
-            .btn-outline-danger:hover {
-                border-radius: 20px;
-            }
-            .right {
-                text-align: right;
-            }
-            .center {
-                text-align: center;
-            }
-            .table > tbody > tr > td {
-                vertical-align: middle;
-            }
-            .link {
-                color: #536A73;
-            }
-            .link:hover {
-                color: #536A73;
-            }
-        </style>
-
         <!-- Navigation -->
         <nav class="navbar navbar-expand-lg navbar-dark shadow">
             <div class="container-fluid">
