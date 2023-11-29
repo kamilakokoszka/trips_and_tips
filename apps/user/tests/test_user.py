@@ -160,7 +160,7 @@ def test_change_password_too_short(client, user):
 def test_user_delete_successful(client, user):
     """Test user is deleted successfully."""
     client.login(email='test@example.com', password='Testpass123')
-    url = reverse('user:delete', args=[user.pk])
+    url = reverse('user:delete', kwargs={'pk': user.pk})
 
     response = client.post(url)
 
@@ -174,7 +174,7 @@ def test_user_delete_successful(client, user):
 @pytest.mark.django_db
 def test_user_profile_view(client, user):
     """Test user profile is displayed correctly."""
-    url = reverse('user:profile', args=[user.pk])
+    url = reverse('user:profile', kwargs={'user_id': user.pk})
 
     response = client.get(url)
 
