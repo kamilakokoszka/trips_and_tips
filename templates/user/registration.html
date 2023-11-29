@@ -5,6 +5,8 @@
     <div class="container">
         <div class="col-md-8 card mb-4 mt-3 top mx-auto">
             <h2 class="card-title" style="padding-top: 15px">Register</h2>
+            <p class="card-text text-center">Registration allows you to create and comment posts.</p>
+            <hr>
             <form method="post">
                 {% csrf_token %}
                 {{ form|crispy }}
