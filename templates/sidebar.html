@@ -1,10 +1,4 @@
 {% block sidebar %}
-
-    <style>
-
-    </style>
-
-    <!-- Sidebar Widgets Column -->
     <div class="col-md-3 float-right" style="margin-top: -7px">
         <div class="card my-4">
             <h5 class="card-header">About Us</h5>
@@ -12,6 +6,14 @@
                 <p class="card-text"> Share your adventures and gain knowledge from others! <br>
                     Trips & Tips is a place where world travelers can share their stories and advice with others. <br>
                     Join this amazing community and show other people the amazing places you have been!</p>
+                <hr>
+                <p class="card-text">Search posts by tag:</p>
+                <form  action="{% url 'post:search' %}" method="get">
+                    <input class="form-control form-control-sm" type="text" name="tag" placeholder="Search...">
+                    <div class="text-center" style="margin-top: 10px">
+                        <button class="btn btn-outline-primary btn-sm" type="submit">Search</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
