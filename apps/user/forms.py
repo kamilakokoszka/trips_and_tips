@@ -9,10 +9,12 @@ class UserLoginForm(forms.Form):
 
 
 class ProfileUpdateForm(forms.ModelForm):
-    bio = forms.CharField(widget=forms.Textarea)
-    website = forms.CharField(max_length=255)
-    picture = forms.ImageField(widget=forms.FileInput)
+    set_default_profile_picture = forms.BooleanField(
+        required=False,
+        initial=False,
+        widget=forms.CheckboxInput(attrs={'class': 'form-check-input'})
+    )
 
     class Meta:
         model = Profile
-        fields = ['bio', 'website', 'picture']
+        fields = ['bio', 'website', 'picture', 'set_default_profile_picture']
