@@ -4,13 +4,13 @@
 {% block content %}
     <div class="container">
         <div class="col-md-8 card mb-4 mt-3 top mx-auto">
-            <h2 class="card-title" style="padding-top: 10px">Confirm deletion</h2>
-            <p class="mx-auto" style="text-align: center">Before deleting your account you have to delete all your posts. <br>
+            <h2 class="card-title">Confirm deletion</h2>
+            <p class="text-center">Before deleting your account you have to delete all your posts. <br>
                 Are you sure you want to delete your account?</p>
             <form method="post">
                 {% csrf_token %}
                 {{ form|crispy }}
-                <div class="text-center" style="margin-bottom: 10px;">
+                <div class="text-center mb-3">
                     <button class="btn btn-outline-danger" type="submit" value="Delete">Delete</button>
                     <a class="btn btn-outline-primary" href="{% url 'user:settings' %}">Cancel</a>
                 </div>

@@ -3,7 +3,7 @@
 {%  block content %}
     <div class="container">
         <div class="col-md-8 card mb-4 mt-3 top mx-auto">
-            <h2 class="card-title" style="padding-top: 10px">Your posts</h2>
+            <h2 class="card-title">Your posts</h2>
             <table class="table">
                 <tbody>
                     {% if not user_posts %}
@@ -27,7 +27,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="text-center" style="margin-bottom: 10px;">
+        <div class="text-center mb-3">
             <a class="btn btn-primary" href="{% url 'post:create' %}">Create post</a>
         </div>
     </div>

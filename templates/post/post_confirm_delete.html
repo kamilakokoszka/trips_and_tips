@@ -9,7 +9,7 @@
             <form method="post">
                 {% csrf_token %}
                 {{ form|crispy }}
-                <div class="text-center" style="margin-bottom: 10px;">
+                <div class="text-center mb-3">
                     <button class="btn btn-outline-danger" type="submit" value="Delete">Delete</button>
                     <a class="btn btn-outline-primary" href="{% url 'post:user-posts' %}">Cancel</a>
                 </div>
