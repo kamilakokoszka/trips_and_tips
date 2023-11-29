@@ -96,7 +96,8 @@ class UserDeleteView(LoginRequiredMixin, DeleteView):
     template_name = 'user/user_confirm_delete.html'
 
     def get_object(self, queryset=None):
-        obj = get_object_or_404(CustomUser, username=self.request.user.username)
+        obj = get_object_or_404(CustomUser,
+                                username=self.request.user.username)
         return obj
 
 
@@ -110,7 +111,9 @@ class UserProfileView(TemplateView):
         user = get_object_or_404(User, id=user_id)
         context['user'] = user
         context['profile'] = get_object_or_404(Profile, user=user)
-        context['user_posts'] = Post.objects.filter(author=user.profile, status=1).order_by('-created_on')
+        context['user_posts'] = (Post.objects
+                                 .filter(author=user.profile, status=1)
+                                 .order_by('-created_on'))
         return context
 
 
@@ -126,6 +129,9 @@ class UserProfileUpdateView(LoginRequiredMixin, View):
                                  request.FILES,
                                  instance=request.user.profile)
         if form.is_valid():
+            if form.cleaned_data.get('set_default_profile_picture'):
+                request.user.profile.picture = 'default.jpg'
+
             form.save()
             messages.success(request, 'Your profile has been updated!')
             return redirect(reverse('user:profile',
