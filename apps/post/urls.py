@@ -8,7 +8,8 @@ from .views import (
     PostCreateView,
     PostUpdateView,
     PostDeleteView,
-    FilterPostsByTagView
+    FilterPostsByTagView,
+    SearchPostsByTagView
 )
 
 app_name = 'post'
@@ -19,6 +20,7 @@ urlpatterns = [
     path('update/<int:pk>/', PostUpdateView.as_view(),
          name='update'),
     path('delete/<int:pk>/', PostDeleteView.as_view(), name='delete'),
-    path('filter/<tag>', FilterPostsByTagView.as_view(), name='tag'),
+    path('filter/<tag>/', FilterPostsByTagView.as_view(), name='tag'),
+    path('search/', SearchPostsByTagView.as_view(), name='search'),
     path('<slug:slug>/', PostDetailView.as_view(), name='details'),
 ]

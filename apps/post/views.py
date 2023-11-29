@@ -154,3 +154,15 @@ class FilterPostsByTagView(View):
                  .order_by('-created_on'))
         return render(request, self.template_name,
                       {'tag': tag, 'posts': posts})
+
+
+class SearchPostsByTagView(View):
+    template_name = 'post/tag.html'
+
+    def get(self, request):
+        tag = request.GET.get('tag')
+        posts = (Post.objects
+                 .filter(tags__name__in=[tag])
+                 .order_by('-created_on'))
+        return render(request, self.template_name,
+                      {'tag': tag, 'posts': posts})
