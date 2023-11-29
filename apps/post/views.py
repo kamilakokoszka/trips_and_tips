@@ -1,4 +1,3 @@
-from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
@@ -115,13 +114,9 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
             return super().get(request, *args, **kwargs)
 
     def form_valid(self, form):
-        if self.object.status == '1':
-            messages.success(self.request,
-                             'The post was updated successfully.')
-        elif self.object.status == '0':
+        if self.object.status == '0':
             self.object.status = 1 if 'publish' in self.request.POST else 0
             self.object.save()
-            messages.success(self.request, 'Post draft updated successfully.')
         return super(PostUpdateView, self).form_valid(form)
 
     def get_success_url(self):

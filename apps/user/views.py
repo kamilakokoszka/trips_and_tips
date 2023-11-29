@@ -1,4 +1,3 @@
-from django.contrib import messages
 from django.contrib.auth import (
     get_user_model,
     authenticate,
@@ -81,12 +80,7 @@ class UserPasswordChangeView(LoginRequiredMixin, View):
         if form.is_valid():
             user = form.save()
             update_session_auth_hash(request, user)
-            messages.success(request,
-                             'Your password has been changed successfully.')
             return redirect(reverse_lazy('user:settings'))
-        else:
-            messages.error(request, 'Please correct the error below.')
-
         return render(request, self.template_name, {'form': form})
 
 
@@ -131,12 +125,8 @@ class UserProfileUpdateView(LoginRequiredMixin, View):
         if form.is_valid():
             if form.cleaned_data.get('set_default_profile_picture'):
                 request.user.profile.picture = 'default.jpg'
-
             form.save()
-            messages.success(request, 'Your profile has been updated!')
             return redirect(reverse('user:profile',
                                     args=[request.user.pk]))
-        else:
-            messages.error(request, 'Please correct the error below.')
 
         return render(request, self.template_name, {'form': form})
