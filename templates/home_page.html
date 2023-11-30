@@ -46,6 +46,7 @@
                     </div>
                 {% endfor %}
             {% endif %}
+                {% block pagination %} {% include 'pagination.html' %} {% endblock pagination %}
             </div>
             {% block sidebar %} {% include 'sidebar.html' %} {% endblock sidebar %}
         </div>
