@@ -28,7 +28,7 @@
                                         <td>
                                             <a class="link" href="{% url 'user:profile' user_id=post.author.user.id %}">{{ post.author.user.username }}</a>
                                         </td>
-                                        <td>{{ post.created_on }}</td>
+                                        <td>{{ post.created_on|date:'Y-m-d' }}</td>
                                         <td class="right">
                                             <a class="btn btn-outline-primary" href="{% url 'post:details' slug=post.slug %}">Read</a>
                                         </td>

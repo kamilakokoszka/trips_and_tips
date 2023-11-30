@@ -29,7 +29,7 @@
                         <div class="card-body">
                             <h2 class="card-title">{{ post.title }}</h2>
                             <a class="card-text text-muted h6" href="{% url 'user:profile' user_id=post.author.user.id %}">{{ post.author.user.username }}</a>
-                                <a class="card-text text-muted h6"> | {{ post.created_on }}</a>
+                                <a class="card-text text-muted h6 date">| {{ post.created_on|date:'Y-m-d' }}</a>
                             {% if post.image %}
                                <img class="image" src="{{ post.image.url }}" alt="connect">
                             {% endif %}
