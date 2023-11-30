@@ -7,6 +7,7 @@
             <div class="col-md-8 card mb-4 mt-3 left top">
                 <div class="card-body">
                     <h2 class="card-title">{{ post.title }}</h2>
+                    <hr>
                     <a class="card-text text-muted h6" href="{% url 'user:profile' user_id=post.author.user.id %}">{{ post.author.user.username }}</a>
                     <a class="card-text text-muted h6">| {{ post.created_on|date:'Y-m-d' }}
                     {% if post.updated_on != post.created_on %}

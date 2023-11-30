@@ -4,7 +4,8 @@
 {% block content %}
     <div class="container">
         <div class="col-md-8 card mb-4 mt-3 top mx-auto">
-            <h1 class="card-title">Update post</h1>
+            <h2 class="card-title mt-2">Update post</h2>
+            <hr class="mt-1">
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ form|crispy }}

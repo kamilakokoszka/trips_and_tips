@@ -2,8 +2,8 @@
 
 {% block content %}
   <div class="profile-container col-md-8 card mb-4 mt-3 top mx-auto">
-      <h2 class="card-title">{{ user.username }}</h2>
-      <hr>
+      <h2 class="card-title mt-2">{{ user.username }}</h2>
+      <hr class="mt-1">
       <div class="row-profile">
           <div class="column left-column ml-2">
               <div class="profile-picture">
@@ -21,8 +21,8 @@
               </div>
           </div>
       </div>
-      <hr>
-      <h4 class="pb-2">{{ user.username }}'s posts</h4>
+      <hr class="mt-1">
+      <h4 class="card-title pb-2 text-left">{{ user.username }}'s posts</h4>
       <table class="table">
           <thead>
               <tr>

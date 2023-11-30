@@ -3,41 +3,40 @@
 {%  block content %}
     <div class="container">
         <div class="row">
-            <div class="col-md-8 card mb-4  mt-3 left top">
-                <div class="card-body">
-                    <h2 class="card-title">{{ tag }}</h2>
-                    {% if not posts %}
-                        <p class="card-text text-center">There are no posts connected to this tag.</p>
-                    {% else %}
-                        <p class="card-text text-center">Posts connected to this tag:</p>
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th>Post title</th>
-                                    <th>Post author</th>
-                                    <th>Date of publication</th>
-                                    <th></th>
+            <div class="col-md-8 card mb-4  mt-3 top mx-auto">
+                <h2 class="card-title mt-2">{{ tag }}</h2>
+                <hr class="mt-1">
+                {% if not posts %}
+                    <p class="card-text text-center">There are no posts connected to this tag.</p>
+                {% else %}
+                    <p class="card-text text-center">Posts connected to this tag:</p>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Post title</th>
+                                <th>Post author</th>
+                                <th>Date of publication</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for post in posts %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ post.title }}</td>
+                                <td>
+                                    <a class="link" href="{% url 'user:profile' user_id=post.author.user.id %}">{{ post.author.user.username }}</a>
+                                </td>
+                                <td>{{ post.created_on|date:'Y-m-d' }}</td>
+                                <td class="right">
+                                    <a class="btn btn-outline-primary" href="{% url 'post:details' slug=post.slug %}">Read</a>
+                                </td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                {% for post in posts %}
-                                    <tr>
-                                        <td>{{ forloop.counter }}</td>
-                                        <td>{{ post.title }}</td>
-                                        <td>
-                                            <a class="link" href="{% url 'user:profile' user_id=post.author.user.id %}">{{ post.author.user.username }}</a>
-                                        </td>
-                                        <td>{{ post.created_on|date:'Y-m-d' }}</td>
-                                        <td class="right">
-                                            <a class="btn btn-outline-primary" href="{% url 'post:details' slug=post.slug %}">Read</a>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    {% endif %}
-                </div>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
             </div>
         </div>
     </div>
