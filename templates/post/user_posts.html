@@ -12,13 +12,14 @@
                         {% for post in user_posts %}
                             <tr>
                                 <td><strong>{{ post.title }}</strong></td>
-                                <td class="right">
+                                <td class="text-right">
                                 {%  if post.status == '1' %}
                                     <a class="btn btn-outline-primary" href="{% url 'post:details' slug=post.slug %}">Read</a>
                                     <a class="btn btn-outline-primary" href="{% url 'post:update' pk=post.pk %}">Update</a>
                                     <a class="btn btn-outline-danger" href="{% url 'post:delete' pk=post.pk %}">Delete</a>
                                 {% elif post.status == '0' %}
                                     <a class="btn btn-outline-primary" href="{% url 'post:update' pk=post.pk %}">Update draft</a>
+                                    <a class="btn btn-outline-danger" href="{% url 'post:delete' pk=post.pk %}">Delete draft</a>
                                 {% endif %}
                                 </td>
                             </tr>
