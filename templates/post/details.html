@@ -24,30 +24,34 @@
                         {% endfor %}
                     </p>
                     <hr>
-                    <h4 class="text-center">Comments</h4>
+                    <h4 class="text-center card-title">Comments</h4>
                     <hr>
-                    {% for comment in comments %}
-                        <div class="comments">
+                    {% if not comments %}
+                        <p class="card-text text-center">There are no comments yet.</p>
+                    {% else %}
+                        {% for comment in comments %}
                             <p class="font-weight-bold">
                                 {{ comment.author }}
                                 <span class=" text-muted font-weight-normal">
                                     {{ comment.created_on }}
                                 </span>
                             </p>
-                        {{ comment.body }}
+                            {{ comment.body }}
+                            <hr>
+                        {% endfor %}
+                    {% endif %}
+                    {% if user.is_authenticated %}
+                        <div class="card-body">
+                            <h5>Add comment:</h5>
+                            <form method="post" class="mt-3">
+                                {% csrf_token %}
+                                {{ form|crispy }}
+                                <div class="text-center">
+                                    <button class="btn btn-outline-primary" type="submit">Add comment</button>
+                                </div>
+                            </form>
                         </div>
-                        <hr>
-                    {% endfor %}
-                    <div class="card-body">
-                        <h5>Add comment:</h5>
-                        <form method="post" class="mt-3">
-                            {% csrf_token %}
-                            {{ form|crispy }}
-                            <div class="text-center">
-                                <button class="btn btn-outline-primary" type="submit">Add comment</button>
-                            </div>
-                        </form>
-                    </div>
+                    {% endif %}
                 </div>
             </div>
             {% block sidebar %} {% include 'sidebar.html' %} {% endblock sidebar %}
