@@ -33,7 +33,7 @@
                             <p class="font-weight-bold">
                                 {{ comment.author }}
                                 <span class=" text-muted font-weight-normal">
-                                    {{ comment.created_on }}
+                                    {{ comment.created_on|date:'Y-m-d H:i' }}
                                 </span>
                             </p>
                             {{ comment.body }}
