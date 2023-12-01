@@ -48,14 +48,6 @@ body, html {
     padding-bottom: 10px;
 }
 
-.right {
-    text-align: right;
-}
-
-.center {
-    text-align: center;
-}
-
 th, td {
     padding: 15px;
     border-bottom: 1px solid #ddd;
@@ -97,11 +89,7 @@ th, td {
     border-radius: 20px;
 }
 
-.btn-outline-danger {
-    border-radius: 20px;
-}
-
-.btn-outline-danger:hover {
+.btn-outline-danger, .btn-outline-danger:hover {
     border-radius: 20px;
 }
 
@@ -113,11 +101,7 @@ th, td {
     color: #536A73;
 }
 
-.link {
-    color: #536A73;
-}
-
-.link:hover {
+.link, .link:hover {
     color: #536A73;
 }
 
