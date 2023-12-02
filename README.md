@@ -7,7 +7,9 @@
 ![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
 
-Trips & Tips is a Django-based blog designed for adventurers to share their experiences with fellow travelers.
+Trips & Tips is a Django-based blog designed for adventurers to share their experiences with fellow travelers. 
+
+Majority of this project were created following Test Driven Development.
 
 ## Features
 
@@ -33,10 +35,12 @@ Trips & Tips is a Django-based blog designed for adventurers to share their expe
 * **Read Others' Posts:** Discover a variety of travel stories and experiences shared by fellow users.
 * **Commenting:** Engage with the community by leaving comments on posts that inspire you.
 
-
 ### Efficient Tag-Based Searching
 
 * **Search by Tags:** Easily navigate posts by clicking on tags or using the search bar to find content related to specific themes or topics.
+
+## Trips & Tips App Preview
+
 
 ## Installation
 
