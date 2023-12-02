@@ -41,6 +41,14 @@ Majority of this project were created following Test Driven Development.
 
 ## Trips & Tips App Preview
 
+![home_page](https://github.com/kamilakokoszka/Trips_and_tips/assets/127201515/d1122723-fb97-44ca-bd3c-7b8937b75958)
+![profile](https://github.com/kamilakokoszka/Trips_and_tips/assets/127201515/3c2d1fc8-6dfd-41d1-b4b4-504046a373c5)
+![post_details](https://github.com/kamilakokoszka/Trips_and_tips/assets/127201515/486526ca-248e-41b6-94fc-2d505bd1f97c)
+![post_details_2](https://github.com/kamilakokoszka/Trips_and_tips/assets/127201515/808499b8-923d-4473-9a0c-0f7e37e3faef)
+![user_posts](https://github.com/kamilakokoszka/Trips_and_tips/assets/127201515/92bffe97-e6cd-450e-8522-68b12af33e88)
+![create_post](https://github.com/kamilakokoszka/Trips_and_tips/assets/127201515/9c1212df-1803-4880-bc96-f3c7c6685897)
+![draft](https://github.com/kamilakokoszka/Trips_and_tips/assets/127201515/c1ccb4dd-66b6-49dc-a269-b7c6a10ce5e7)
+![tag](https://github.com/kamilakokoszka/Trips_and_tips/assets/127201515/d1b7616f-648b-4dac-acd2-82ef87265290)
 
 ## Installation
 
