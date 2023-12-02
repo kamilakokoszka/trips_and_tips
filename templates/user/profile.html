@@ -7,7 +7,11 @@
       <div class="row-profile">
           <div class="column left-column ml-2">
               <div class="profile-picture">
-                  <img src="{{ profile.picture.url }}" alt="Profile Picture">
+                  {% if profile.picture.name == 'default.jpg' %}
+                    <img src="https://res.cloudinary.com/dp7jbui7n/image/upload/v1701509179/media/default.jpg" alt="Profile Picture">
+                  {% else %}
+                    <img src="{{ profile.picture.url }}" alt="Profile Picture">
+                  {% endif %}
               </div>
               <br>
               {% if profile.website %}
