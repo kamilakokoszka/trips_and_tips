@@ -15,7 +15,7 @@ Majority of this project were created following Test Driven Development.
 
 **App screenshots are available below.**
 
-~~App deployed on Vercel: https://trips-and-tips.vercel.app/~~
+App deployed on Vercel: https://trips-and-tips.vercel.app/
 
 ## Features
 
