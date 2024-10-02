@@ -11,8 +11,6 @@ Trips & Tips is a Django-based blog designed for adventurers to share their expe
 
 Majority of this project were created following Test Driven Development.
 
-**Unfortunately, due to Railway database provider's temporary problems, the app is currently unavailable :(**
-
 **App screenshots are available below.**
 
 App deployed on Vercel: https://trips-and-tips.vercel.app/
